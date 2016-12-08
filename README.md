@@ -2,7 +2,7 @@
 
 Multimodal Low-rank Bilinear Attention Networks (MLB) have an efficient attention mechanism by low-rank bilinear pooling for visual question-answering tasks. MLB achieves a new state-of-the-art performance, having a better parsimonious property than previous methods.
 
-This current code can get **65.07** on Open-Ended and **68.89** on Multiple-Choice on **test-standard** split for the [VQA dataset](http://visualqa.org).
+This current code can get **65.07** on Open-Ended and **68.89** on Multiple-Choice on **test-standard** split for the [VQA dataset](http://visualqa.org). For an ensemble model, **66.89** and **70.29**, resepectively.
 
 For now, the model definition is available. We're polishing messy codes and confirming the whole steps to reproduce paper results seamlessly. Stay tuned for upcoming updates!
 
