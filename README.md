@@ -6,6 +6,46 @@ This current code can get **65.07** on Open-Ended and **68.89** on Multiple-Choi
 
 For now, the model definition is available. We're polishing messy codes and confirming the whole steps to reproduce paper results seamlessly. Stay tuned for upcoming updates!
 
+### Dependencies
+
+* [rnn](https://github.com/Element-Research/rnn)
+
+You can install the dependencies:
+
+```bash
+luarocks install rnn
+```
+
+### Training
+
+Please follow the instruction from [VQA_LSTM_CNN](https://github.com/VT-vision-lab/VQA_LSTM_CNN/blob/master/readme.md) for preprocessing. `--split 2` option allows to use train+val set to train, and test-dev or test-standard set to evaluate. Set `--num_ans` to `2000` to reproduce the result.
+
+For question features, you need to use this:
+
+* [skip-thoughts](https://github.com/ryankiros/skip-thoughts)
+* [DPPnet](https://github.com/HyeonwooNoh/DPPnet) (see 003_skipthoughts_porting)
+* `make_lookuptable.lua`
+
+for image features,
+
+```
+$ th prepro_res.lua -input_json data_train-val_test-dev_2k/data_prepro.json -image_root path_to_image_root -cnn_model path to cnn_model
+```
+
+The pretrained ResNet-152 model and related scripts can be found in [fb.resnet.torch](https://github.com/facebook/fb.resnet.torch/blob/master/datasets/transforms.lua).
+
+```
+$ th train.lua
+``` 
+
+With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`.  
+
+### Evaluation
+
+```
+$ th eval.lua
+```
+
 ### References
 
 If you use this code as part of any published research, we'd really appreciate it if you could cite the following paper:
