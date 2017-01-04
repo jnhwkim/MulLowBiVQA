@@ -2,7 +2,7 @@ require 'cbp'  -- https://github.com/jnhwkim/cbp
 
 function netdef.MCB(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_layers,noutput,batch_size,glimpse)
    local p = .5
-   local activation = 'Tanh'
+   local activation = 'ReLU'
    local multimodal_net=nn.Sequential()
    local glimpse=glimpse or 2
    assert(num_layers==1, 'do not support stacked structure')
@@ -59,7 +59,7 @@ function netdef.MCB(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_l
             :add(nn.Reshape(batch_size, 14, 14, 16000, false))
             :add(nn.Transpose({3,4},{2,3}))
             :add(nn.SpatialConvolution(16000,512,1,1,1,1))
-            :add(nn.ReLU(true))
+            :add(nn[activation](true))
             :add(nn.SpatialConvolution(512,glimpse,1,1,1,1))
             :add(nn.Reshape(batch_size, glimpse, 14*14, false))
             :add(nn.SplitTable(2))
