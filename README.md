@@ -4,7 +4,7 @@ Multimodal Low-rank Bilinear Attention Networks (MLB) have an efficient attentio
 
 This current code can get **65.07** on Open-Ended and **68.89** on Multiple-Choice on **test-standard** split for the [VQA dataset](http://visualqa.org). For an ensemble model, **66.89** and **70.29**, resepectively.
 
-For now, the model definition is available. We're polishing messy codes and confirming the whole steps to reproduce paper results seamlessly. Stay tuned for upcoming updates!
+~~For now, the model definition is available. We're polishing messy codes and confirming the whole steps to reproduce paper results seamlessly. Stay tuned for upcoming updates!~~ Updated!
 
 ### Dependencies
 
