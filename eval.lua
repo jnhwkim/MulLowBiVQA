@@ -35,7 +35,7 @@ cmd:option('-type', 'test-dev2015', 'evaluation set')
 
 -- Model parameter settings (shoud be the same with the training)
 cmd:option('-backend', 'nn', 'nn|cudnn')
-cmd:option('-batch_size', 24,'batch_size for each iterations')
+cmd:option('-batch_size', 200,'batch_size for each iterations')
 cmd:option('-rnn_model', 'GRU', 'question embedding model')
 cmd:option('-input_encoding_size', 620, 'he encoding size of each token in the vocabulary')
 cmd:option('-rnn_size',2400,'size of the rnn in number of hidden nodes in each layer')

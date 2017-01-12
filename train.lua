@@ -36,7 +36,7 @@ cmd:option('-input_skip','skipthoughts_model','path to skipthoughts_params')
 cmd:option('-mhdf5_size', 10000)
 
 -- Model parameter settings
-cmd:option('-batch_size',24,'batch_size for each iterations')
+cmd:option('-batch_size',100,'batch_size for each iterations')
 cmd:option('-rnn_model', 'GRU', 'question embedding model')
 cmd:option('-input_encoding_size', 620, 'the encoding size of each token in the vocabulary')
 cmd:option('-rnn_size',2400,'size of the rnn in number of hidden nodes in each layer')
