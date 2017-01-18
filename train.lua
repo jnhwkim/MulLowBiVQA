@@ -217,7 +217,7 @@ embedding_net_q=nn.Sequential()
             :add(lookup)
             :add(nn.SplitTable(2))
 
-require 'netdef.MRN'
+require('netdef.'..opt.model_name)
 if opt.model_name=='MCB' then
    multimodal_net,cbp1,cbp2=netdef[opt.model_name](rnn_size_q,nhimage,common_embedding_size,dropout,num_layers,noutput,batch_size,glimpse)
 else
