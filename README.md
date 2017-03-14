@@ -50,7 +50,7 @@ If you use this code as part of any published research, we'd really appreciate i
 
 ```
 @inproceedings{Kim2016c,
-author = {Kim, Jin-Hwa and On, Kyoung-Woon and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
+author = {Kim, Jin-Hwa and On, Kyoung-Woon and Lim, Woosang and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
 booktitle = {5th International Conference on Learning Representations},
 title = {{Hadamard Product for Low-rank Bilinear Pooling}},
 archivePrefix = {arXiv},
