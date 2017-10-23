@@ -8,7 +8,7 @@ require 'Dropconnect'
 --Multimodal Low-rank Bilinear Attention Networks (MLB)
 --Use 1x1 convolution for dimension reduction
 netdef = {}
-function netdef.MLB(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_layers,noutput,batch_size,glimpse)
+function netdef.MLBdc(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_layers,noutput,batch_size,glimpse)
    local p = .5  -- dropout ratio
    local activation = 'Tanh'
    local multimodal_net=nn.Sequential()
@@ -116,7 +116,7 @@ function netdef.MLB(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_l
    return multimodal_net
 end
 
-function netdef.MLB_updateBatchSize(net,nhimage,common_embedding_size,num_layers,batch_size,glimpse)
+function netdef.MLBdc_updateBatchSize(net,nhimage,common_embedding_size,num_layers,batch_size,glimpse)
    local ngrid=14*14
    local idx=2  -- start idx
    local mstep=5
