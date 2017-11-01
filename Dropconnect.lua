@@ -6,6 +6,7 @@
    Dept. of Computer Science, Courant Institute of Mathematical Science, New York University
 
    Implemented by John-Alexander M. Assael (www.johnassael.com), 2015
+   Updated by Jin-Hwa Kim (jnhwkim@snu.ac.kr), 2017
 
 ]]--
 
@@ -67,6 +68,9 @@ function LinearDropconnect:updateOutput(input)
       else
          self.output:copy(self.bias)
          self.output:addmv(1, self.weight, input)
+         if self.p > 0 then
+            self.output:div(1-self.p)
+         end
       end
    elseif input:dim() == 2 then
       local nframe = input:size(1)
@@ -85,6 +89,9 @@ function LinearDropconnect:updateOutput(input)
       else
          self.output:addmm(0, self.output, 1, input, self.weight:t())
          self.output:addr(1, self.addBuffer, self.bias)
+         if self.p > 0 then
+            self.output:div(1-self.p)
+         end
       end
    else
       error('input must be vector or matrix')
