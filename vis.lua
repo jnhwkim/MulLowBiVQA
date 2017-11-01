@@ -174,7 +174,7 @@ if opt.gpuid >= 0 then
 end
 
 -- setting to evaluation
-model:evaluate()
+model:training()
 
 w,dw=model:getParameters();
 print('nParams=', w:size())
@@ -298,7 +298,6 @@ function prepro_att(att)
    std = att[1]:std()
    return nn.Tanh():forward((att-mu)/std)
 end
-
 function grounding(model, x)
    F = model:get(2):get(5):get(1):get(2).output
    Q = model:get(2):get(5):get(1):get(1).output[1]  -- 2400
@@ -309,6 +308,7 @@ function grounding(model, x)
    end
    grad = model:get(2):get(1):backward(model:get(1).output, grad)
    grad = model:get(1):backward(x, grad)
+   grad[1] = model:get(1):get(1):get(1):get(2).gradInput
    return grad
 end
 
@@ -347,26 +347,47 @@ function visualize(model, s, e, scores, x)
       net:get(1).gradInput=torch.CudaTensor()  -- workaround
       net:backward(img, dV)
       dI = net:get(1).gradInput:float()
-      out = torch.sum(torch.abs(dI), 1)
-      out:copy(out - torch.mean(out) - torch.std(out))
+      out = torch.sum(torch.abs(dI[1]), 1)
+      out:copy(out - torch.mean(out) - torch.std(out)*2)
       out = nn.ReLU():forward(out)
-      out:div(torch.max(out))
+      
+      out = torch.gt(out, 0):float()
+      out = torch.cat({out, out, out}, 1)
 
-      gnd = im0:clone()/1.5 + out
+      pooler = nn.SpatialMaxPooling(5,5,1,1,2,2):cuda()
+      out = pooler:forward(out:cuda())
+      out = out:float()
 
-      image.save('visualize/'..target_ques_id..'_gnd.png', gnd)  -- grounding V
+      gnd = im0:clone():cmul(torch.eq(out, 0):float()*0 + torch.gt(out, 0):float())
+
+      image.save('visualize/'..target_ques_id..'_vgd.png', gnd)  -- grounding V
+
+      x = torch.sum(torch.abs(grad[1][idx]), 2)
+      vals = {}
 
       question = ''
       for i=1,26 do
          w_ix = dataset['question'][h5_idx][i]
          if w_ix > 0 then
             question = question..json_file['ix_to_word'][tostring(w_ix)]..' '
+            table.insert(vals, x[i][1])
          end
       end
+
+      x = torch.Tensor(vals)
+      z = (x-x:mean())/x:std()
+
+      qgd = ''
+      for i=1,#vals do
+         qgd = qgd .. string.format('%.4f', z[i])
+         if i<#vals then qgd = qgd .. ', ' end
+      end
+
       f:write(h5_idx, '\t')
       f:write(target_ques_id, '\t')
       f:write(question, '\t')
-      f:write(pred, '\t\n')
+      f:write(pred, '\t')
+      f:write(qgd, '\n')
       f:flush()
    end
 end
@@ -384,6 +405,7 @@ function forward(s,e)
 		netdef[opt.model_name..'_updateBatchSize'](multimodal_net,nhimage,common_embedding_size,num_layers,batch_size,glimpse)
 	end
 	model:cuda()
+   model:zeroGradParameters()
 	local scores = model:forward({fv_sorted_q, fv_im})
    visualize(model, s, e, scores, {fv_sorted_q, fv_im})
 
@@ -393,7 +415,7 @@ end
 -----------------------------------------------------------------------
 -- Do Prediction
 -----------------------------------------------------------------------
-nSamples = opt.batch_size  -- 3000
+nSamples = 10000 -- opt.batch_size
 nqs=nSamples -- dataset['question']:size(1);
 scores=torch.Tensor(nqs,noutput);
 qids=torch.LongTensor(nqs);
