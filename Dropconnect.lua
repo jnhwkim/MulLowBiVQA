@@ -11,7 +11,7 @@
 
 local LinearDropconnect, parent = torch.class('nn.LinearDropconnect', 'nn.Linear')
 
-function LinearDropconnect:__init(inputSize, outputSize, p)
+function LinearDropconnect:__init(inputSize, outputSize, p, activation)
 
    self.train = true
 
@@ -19,6 +19,7 @@ function LinearDropconnect:__init(inputSize, outputSize, p)
    if self.p >= 1 or self.p < 0 then
       error('<LinearDropconnect> illegal percentage, must be 0 <= p < 1')
    end
+   self.activation = nn[activation]()
 
    self.noiseWeight = torch.Tensor(outputSize, inputSize)
    self.noiseBias = torch.Tensor(outputSize)
@@ -52,6 +53,36 @@ function LinearDropconnect:reset(stdv)
 end
 
 function LinearDropconnect:updateOutput(input)
+   if self.train then
+      return self:_updateOutput(input)
+   else
+      N = 20
+      assert(input:dim()==2, 'only support 2d input!')
+      if not self.samples then
+         self.samples = torch.Tensor(N, input:size(1), self.weight:size(1)):typeAs(input)
+      end
+      self.samples:zero()
+      self.train = true
+      for i=1,N do
+         self.samples[i]:copy(self:_updateOutput(input))
+      end
+      mu = self.samples:mean(1):squeeze(1)
+      std = self.samples:std(1):squeeze(1)
+      Z = 20
+      self.output:zero()
+      for z=1,Z do
+         u = torch.randn(input:size(1), self.weight:size(1)):typeAs(input):cmul(std):add(mu)
+         self.output:add(self.activation:forward(u))
+      end
+      self.output:div(Z)
+      self.train = false
+      self.samples = nil
+      collectgarbage()
+   end
+   return self.output
+end
+
+function LinearDropconnect:_updateOutput(input)
 
    -- Dropconnect
    if self.train then
