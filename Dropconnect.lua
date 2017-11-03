@@ -11,7 +11,7 @@
 
 local LinearDropconnect, parent = torch.class('nn.LinearDropconnect', 'nn.Linear')
 
-function LinearDropconnect:__init(inputSize, outputSize, p, activation)
+function LinearDropconnect:__init(inputSize, outputSize, p, stochastic_inference, activation, nSamples)
 
    self.train = true
 
@@ -19,7 +19,9 @@ function LinearDropconnect:__init(inputSize, outputSize, p, activation)
    if self.p >= 1 or self.p < 0 then
       error('<LinearDropconnect> illegal percentage, must be 0 <= p < 1')
    end
+   self.stochastic_inference = stochastic_inference
    self.activation = nn[activation]()
+   self.nSamples = nSamples or 30  -- caution: super slow!
 
    self.noiseWeight = torch.Tensor(outputSize, inputSize)
    self.noiseBias = torch.Tensor(outputSize)
@@ -53,10 +55,10 @@ function LinearDropconnect:reset(stdv)
 end
 
 function LinearDropconnect:updateOutput(input)
-   if self.train then
-      return self:_updateOutput(input)
+   if self.train or not self.stochastic_inference then
+      return self.activation:forward(self:_updateOutput(input))
    else
-      N = 20
+      N = self.nSamples
       assert(input:dim()==2, 'only support 2d input!')
       if not self.samples then
          self.samples = torch.Tensor(N, input:size(1), self.weight:size(1)):typeAs(input)
@@ -68,7 +70,7 @@ function LinearDropconnect:updateOutput(input)
       end
       mu = self.samples:mean(1):squeeze(1)
       std = self.samples:std(1):squeeze(1)
-      Z = 20
+      Z = self.nSamples
       self.output:zero()
       for z=1,Z do
          u = torch.randn(input:size(1), self.weight:size(1)):typeAs(input):cmul(std):add(mu)
@@ -121,10 +123,13 @@ function LinearDropconnect:_updateOutput(input)
       error('input must be vector or matrix')
    end
 
+   self._output = self.output:clone()
+
    return self.output
 end
 
 function LinearDropconnect:updateGradInput(input, gradOutput)
+   gradOutput = self.activation():updateGradInput(self._output, gradOutput)
    if self.gradInput then
 
       local nElement = self.gradInput:nElement()

@@ -9,7 +9,7 @@
 ------------------------------------------------------------------------
 local Dropout, Parent = nn.Dropout, nn.Module
 
-function Dropout:__init(p,v1,inplace,lazy,mono,stochastic_inference,func)
+function Dropout:__init(p,v1,inplace,lazy,mono,stochastic_inference,func,nSamples)
    Parent.__init(self)
    self.p = p or 0.5
    self.train = true
@@ -18,6 +18,7 @@ function Dropout:__init(p,v1,inplace,lazy,mono,stochastic_inference,func)
    self.mono = mono or false  -- used by trimZero, single sample for a batch
    self.stochastic_inference = stochastic_inference
    self.func = func
+   self.nSamples = nSamples or 30
    self.flag = true  -- used by lazy noise
    -- version 2 scales output during training instead of evaluation
    self.v2 = not v1
@@ -27,11 +28,19 @@ function Dropout:__init(p,v1,inplace,lazy,mono,stochastic_inference,func)
    self.noise = torch.Tensor()
 end
 
+function Dropout:parameters()
+   if self.stochastic_inference then
+      return self.func:parameters()
+   else
+      return 
+   end
+end
+
 function Dropout:updateOutput(input)
    if self.train or not self.stochastic_inference then
       return self:_updateOutput(input)
    else
-      N = 10
+      N = self.nSamples
       assert(input:dim()==2, 'only support 2d input!')
       if not self.samples then
          self.samples = torch.Tensor(N, input:size(1), self.func:get(1).weight:size(1)):typeAs(input)
@@ -42,7 +51,7 @@ function Dropout:updateOutput(input)
       end
       mu = self.samples:mean(1):squeeze(1)
       std = self.samples:std(1):squeeze(1)
-      Z = 10
+      Z = self.nSamples
       self.output:resizeAs(self.samples[1]):zero()
       for z=1,Z do
          u = torch.randn(input:size(1), self.func:get(1).weight:size(1)):typeAs(input):cmul(std):add(mu)
@@ -63,7 +72,7 @@ function Dropout:_updateOutput(input)
       self.output:resizeAs(input):copy(input)
    end
    if self.p > 0 then
-      if self.train then
+      if self.train or self.stochastic_inference then
          if not self.lazy or self.flag then
             local noiseSize = input:size()
             if self.mono then noiseSize[1] = 1 end
@@ -82,10 +91,12 @@ function Dropout:_updateOutput(input)
          self.output:mul(1-self.p)
       end
    end
+   self._output = self.output:clone()
    return self.output
 end
 
 function Dropout:updateGradInput(input, gradOutput)
+   gradOutput = self.func:updateGradInput(self._output, gradOutput)
    if self.lazy then
       self.flag = true
    end
