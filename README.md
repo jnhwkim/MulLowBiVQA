@@ -36,7 +36,7 @@ The pretrained ResNet-152 model and related scripts can be found in [fb.resnet.t
 $ th train.lua
 ``` 
 
-With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`. **For the result of the paper, use `-seconds` option for `answer sampling` in Section 5. `seconds.json` file can be optained using `prepro_seconds.lua`.**
+With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`. For the result of the paper, use `-seconds` option for `answer sampling` in Section 5. `seconds.json` file can be optained using `prepro_seconds.lua` or from [here](https://drive.google.com/drive/folders/0B-75nmZV6j-JLUJRZlJPVjVBZ2c?usp=sharing) (updated as default).
 
 ### Evaluation
 
