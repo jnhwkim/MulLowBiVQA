@@ -4,4 +4,5 @@ You can download the preprocessed data for learning from [here](https://drive.go
 
 - data_prepro.h5 (49 MB)
 - data_prepro.json (6 MB)
+- seconds.json (1.8 MB) (The output of `prepro_seconds.lua`)
 - ~~data_res.h5 (1 GB)~~ (This is not for this repository! Please run `prepro_res.lua` to generate visual features.)
