@@ -51,11 +51,11 @@ $ th eval.lua
 If you use this code as part of any published research, we'd really appreciate it if you could cite the following paper:
 
 ```
-@article{Kim2016c,
-author = {Kim, Jin-Hwa and On, Kyoung-Woon and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
+@inproceedings{Kim2017,
+author = {Kim, Jin-Hwa and On, Kyoung Woon and Lim, Woosang and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
+booktitle = {The 5th International Conference on Learning Representations},
 title = {{Hadamard Product for Low-rank Bilinear Pooling}},
-url = {http://arxiv.org/abs/1610.04325},
-year = {2016}
+year = {2017}
 }
 ```
 

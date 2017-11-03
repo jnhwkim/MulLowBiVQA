@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 --  Hadamard Product for Low-rank Bilinear Pooling
---  Jin-Hwa Kim, Kyoung-Woon On, Jeonghee Kim, Jung-Woo Ha, Byoung-Tak Zhang 
+--  Jin-Hwa Kim, Kyoung-Woon On, Woosang Lim, Jeonghee Kim, Jung-Woo Ha, Byoung-Tak Zhang 
 --  https://arxiv.org/abs/1610.04325
 ------------------------------------------------------------------------------
 
