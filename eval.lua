@@ -151,7 +151,7 @@ embedding_net_q=nn.Sequential()
             :add(lookup)
             :add(nn.SplitTable(2))
 
-require 'netdef.MRN'
+require('netdef.'..opt.model_name)
 multimodal_net=netdef[opt.model_name](rnn_size_q,nhimage,common_embedding_size,dropout,num_layers,noutput,batch_size,glimpse)
 print(multimodal_net)
 

@@ -4,8 +4,6 @@ Multimodal Low-rank Bilinear Attention Networks (MLB) have an efficient attentio
 
 This current code can get **65.07** on Open-Ended and **68.89** on Multiple-Choice on **test-standard** split for the [VQA dataset](http://visualqa.org). For an ensemble model, **66.89** and **70.29**, resepectively.
 
-~~For now, the model definition is available. We're polishing messy codes and confirming the whole steps to reproduce paper results seamlessly. Stay tuned for upcoming updates!~~ Updated!
-
 ### Dependencies
 
 * [rnn](https://github.com/Element-Research/rnn)
@@ -38,7 +36,7 @@ The pretrained ResNet-152 model and related scripts can be found in [fb.resnet.t
 $ th train.lua
 ``` 
 
-With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`.  
+With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`. **For the result of the paper, use `-seconds` option for `answer sampling` in Section 5. `seconds.json` file can be optained using `prepro_seconds.lua`.**
 
 ### Evaluation
 

@@ -1,5 +1,6 @@
 require 'cbp'  -- https://github.com/jnhwkim/cbp
 
+netdef = {}
 function netdef.MCB(rnn_size_q,nhimage,common_embedding_size,joint_dropout,num_layers,noutput,batch_size,glimpse)
    local p = .5
    local activation = 'ReLU'
