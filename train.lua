@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 --  Hadamard Product for Low-rank Bilinear Pooling
---  Jin-Hwa Kim, Kyoung-Woon On, Jeonghee Kim, Jung-Woo Ha, Byoung-Tak Zhang 
+--  Jin-Hwa Kim, Kyoung-Woon On, Woosang Lim, Jeonghee Kim, Jung-Woo Ha, Byoung-Tak Zhang 
 --  https://arxiv.org/abs/1610.04325
 --
 --  This code is based on 
@@ -50,7 +50,7 @@ cmd:option('-glimpse', 2, '# of glimpses')
 cmd:option('-clipping', 10, 'gradient clipping')
 
 -- Second Answers
-cmd:option('-seconds', false, 'usage of second candidate answers')
+cmd:option('-seconds', true, 'usage of second candidate answers')
 cmd:option('-input_seconds', 'data_train-val_test-dev_2k/seconds.json')
 
 -- Optimizer parameter settings

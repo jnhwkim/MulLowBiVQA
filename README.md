@@ -36,7 +36,7 @@ The pretrained ResNet-152 model and related scripts can be found in [fb.resnet.t
 $ th train.lua
 ``` 
 
-With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`. **For the result of the paper, use `-seconds` option for `answer sampling` in Section 5. `seconds.json` file can be optained using `prepro_seconds.lua`.**
+With the default parameter, this will take around 2.6 days on a sinlge NVIDIA Titan X GPU, and will generate the model under `model/`. For the result of the paper, use `-seconds` option for `answer sampling` in Section 5. `seconds.json` file can be optained using `prepro_seconds.lua` or from [here](https://drive.google.com/drive/folders/0B-75nmZV6j-JLUJRZlJPVjVBZ2c?usp=sharing) (updated as default).
 
 ### Evaluation
 
@@ -49,12 +49,10 @@ $ th eval.lua
 If you use this code as part of any published research, we'd really appreciate it if you could cite the following paper:
 
 ```
-@inproceedings{Kim2016c,
-author = {Kim, Jin-Hwa and On, Kyoung-Woon and Lim, Woosang and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
-booktitle = {5th International Conference on Learning Representations},
+@inproceedings{Kim2017,
+author = {Kim, Jin-Hwa and On, Kyoung Woon and Lim, Woosang and Kim, Jeonghee and Ha, Jung-Woo and Zhang, Byoung-Tak},
+booktitle = {The 5th International Conference on Learning Representations},
 title = {{Hadamard Product for Low-rank Bilinear Pooling}},
-archivePrefix = {arXiv},
-arxivId = {1610.04325},
 year = {2017}
 }
 ```
